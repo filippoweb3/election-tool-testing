@@ -19,7 +19,7 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("simulate_11215541_20iter.json")
+  sim_data <- jsonlite::fromJSON("simulate.json")
 
   summary_data <- summarize_sim_data(sim_data = sim_data, account = accounts[j])
 
