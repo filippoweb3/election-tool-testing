@@ -11,15 +11,15 @@ fetch_scanner_data <- function(account) {
 
   res <- httr::POST(
     url = api_url,
-    add_headers(
+    httr::add_headers(
       `Content-Type` = "application/json",
       `x-api-key` = api_key
     ),
-    body = toJSON(body, auto_unbox = TRUE)
+    body = jsonlite::toJSON(body, auto_unbox = TRUE)
   )
 
-  scanner_content <- content(res, as = "text", encoding = "UTF-8")
-  scanner_data <- fromJSON(scanner_content)
+  scanner_content <- httr::content(res, as = "text", encoding = "UTF-8")
+  scanner_data <- jsonlite::fromJSON(scanner_content)
 
   scanner_data <- scanner_data$data$list
   scanner_data <- data.frame(
@@ -48,11 +48,11 @@ summarize_sim_data <- function(sim_data, account) {
       summary_data[[i]] <- data.frame(
         nominator_account = nominations[[i]][account == nominations[[i]]$nominator,1],
         stash = sim_data$active_validators$stash[[i]],
-        self_stake = as.numeric(str_remove(sim_data$active_validators$self_stake[[i]], " DOT")),
-        total_stake = as.numeric(str_remove(sim_data$active_validators$total_stake[[i]], " DOT")),
+        self_stake = as.numeric(stringr::str_remove(sim_data$active_validators$self_stake[[i]], " DOT")),
+        total_stake = as.numeric(stringr::str_remove(sim_data$active_validators$total_stake[[i]], " DOT")),
         #commission = sim_data$active_validators$commission[[i]],
         nominations_count = sim_data$active_validators$nominations_count[[i]],
-        nominator_stake = as.numeric(str_remove(nominations[[i]][account == nominations[[i]]$nominator,2], " DOT")),
+        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$nominator,2], " DOT")),
         active = TRUE
       )
     }

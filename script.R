@@ -1,7 +1,7 @@
-library(jsonlite)
-library(httr)
-library(dplyr)
-library(stringr)
+#library(jsonlite)
+#library(httr)
+#library(dplyr)
+#library(stringr)
 
 accounts <- c(
   "15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK",
@@ -19,7 +19,7 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- fromJSON("simulate_11215541_20iter.json")
+  sim_data <- jsonlite::fromJSON("simulate_11215541_20iter.json")
 
   summary_data <- summarize_sim_data(sim_data = sim_data, account = accounts[j])
 
