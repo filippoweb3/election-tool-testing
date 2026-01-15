@@ -9,7 +9,7 @@ fetch_scanner_data <- function(account) {
     row = 50
   )
 
-  res <- POST(
+  res <- httr::POST(
     url = api_url,
     add_headers(
       `Content-Type` = "application/json",
