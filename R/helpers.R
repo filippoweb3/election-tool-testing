@@ -37,7 +37,7 @@ fetch_scanner_data <- function(account) {
 }
 
 #' @export
-summarize_sim_data <- function(sim_data, account) {
+summarize_sim_data_bilinear <- function(sim_data, account) {
 
   nominations <- sim_data$active_validators$nominations
 
@@ -53,6 +53,34 @@ summarize_sim_data <- function(sim_data, account) {
         #commission = sim_data$active_validators$commission[[i]],
         nominations_count = sim_data$active_validators$nominations_count[[i]],
         nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$nominator,2], " DOT")),
+        active = TRUE
+      )
+    }
+  }
+
+  summary_data <- do.call(rbind, summary_data[lengths(summary_data) > 0])
+
+  return(summary_data)
+
+}
+
+#' @export
+summarize_sim_data_antiers <- function(sim_data, account) {
+
+  nominations <- sim_data$results$nominators
+
+  summary_data <- list()
+
+  for (i in 1:length(nominations)) {
+    if(account %in% nominations[[i]]$address) {
+      summary_data[[i]] <- data.frame(
+        nominator_account = nominations[[i]][account == nominations[[i]]$address,1],
+        stash = sim_data$results$account[i],
+        self_stake = as.numeric(stringr::str_remove(sim_data$results$self_stake[i], " DOT")),
+        total_stake = as.numeric(stringr::str_remove(sim_data$results$total_stake[i], " DOT")),
+        #commission = sim_data$active_validators$commission[[i]],
+        nominations_count = sim_data$results$nominator_count[i],
+        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$address,2], " DOT")),
         active = TRUE
       )
     }

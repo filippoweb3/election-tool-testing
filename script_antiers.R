@@ -19,9 +19,9 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("simulate.json")
+  sim_data <- jsonlite::fromJSON("validators_prediction_11229417.json")
 
-  summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j])
+  summary_data <- summarize_sim_data_antiers(sim_data = sim_data, account = accounts[j])
 
   # Tests ----
 
@@ -50,4 +50,3 @@ for (j in 1:length(accounts)){
 }
 
 do.call(rbind, big_data)
-
