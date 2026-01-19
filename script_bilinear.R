@@ -19,7 +19,7 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("simulate.json")
+  sim_data <- jsonlite::fromJSON("simulate_11285143.json")
 
   summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j])
 
@@ -50,4 +50,17 @@ for (j in 1:length(accounts)){
 }
 
 do.call(rbind, big_data)
+
+# Snapshots ----
+
+fetched <- jsonlite::fromJSON("snapshot_11285178.json")
+built <- jsonlite::fromJSON("snapshot_11285143.json")
+
+fetched_nom <- fetched$nominators$stash
+built_nom <- built$nominators$stash
+
+sum(fetched_nom %in% built_nom)/length(fetched_nom)
+
+# Manual override ----
+
 
