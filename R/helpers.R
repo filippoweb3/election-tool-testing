@@ -1,7 +1,14 @@
 #' @export
-fetch_scanner_data <- function(account) {
-  api_url <- "https://assethub-polkadot.api.subscan.io/api/scan/staking/voted"
+fetch_scanner_data <- function(account, chain = "Polkadot") {
   api_key <- "9186f194f5ee47fcb462a97135c35626"
+
+  if(chain == "Polkadot"){
+    api_url <- "https://assethub-polkadot.api.subscan.io/api/scan/staking/voted"
+    scale <- 10^10
+  } else if(chain == "Kusama"){
+    api_url <- "https://assethub-kusama.api.subscan.io/api/scan/staking/voted"
+    scale <- 10^12
+  }
 
   body <- list(
     address = account,
@@ -25,10 +32,10 @@ fetch_scanner_data <- function(account) {
   scanner_data <- data.frame(
     nominator_account = account,
     stash = scanner_data$stash_account_display$address,
-    self_stake = as.numeric(scanner_data$bonded_owner)/10^10,
-    total_stake = as.numeric(scanner_data$bonded_nominators)/10^10 + as.numeric(scanner_data$bonded_owner)/10^10,
+    self_stake = as.numeric(scanner_data$bonded_owner)/scale,
+    total_stake = as.numeric(scanner_data$bonded_nominators)/scale + as.numeric(scanner_data$bonded_owner)/scale,
     nominations_count = scanner_data$count_nominators,
-    nominator_stake = as.numeric(scanner_data$bonded)/10^10,
+    nominator_stake = as.numeric(scanner_data$bonded)/scale,
     active = scanner_data$active
   )
 
@@ -37,7 +44,13 @@ fetch_scanner_data <- function(account) {
 }
 
 #' @export
-summarize_sim_data_bilinear <- function(sim_data, account) {
+summarize_sim_data_bilinear <- function(sim_data, account, chain = "Polkadot") {
+
+  if(chain == "Polkadot"){
+    unit <- " DOT"
+  } else if(chain == "Kusama"){
+    unit <- " KSM"
+  }
 
   nominations <- sim_data$active_validators$nominations
 
@@ -48,11 +61,11 @@ summarize_sim_data_bilinear <- function(sim_data, account) {
       summary_data[[i]] <- data.frame(
         nominator_account = nominations[[i]][account == nominations[[i]]$nominator,1],
         stash = sim_data$active_validators$stash[[i]],
-        self_stake = as.numeric(stringr::str_remove(sim_data$active_validators$self_stake[[i]], " DOT")),
-        total_stake = as.numeric(stringr::str_remove(sim_data$active_validators$total_stake[[i]], " DOT")),
+        self_stake = as.numeric(stringr::str_remove(sim_data$active_validators$self_stake[[i]], unit)),
+        total_stake = as.numeric(stringr::str_remove(sim_data$active_validators$total_stake[[i]], unit)),
         #commission = sim_data$active_validators$commission[[i]],
         nominations_count = sim_data$active_validators$nominations_count[[i]],
-        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$nominator,2], " DOT")),
+        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$nominator,2], unit)),
         active = TRUE
       )
     }
@@ -65,7 +78,13 @@ summarize_sim_data_bilinear <- function(sim_data, account) {
 }
 
 #' @export
-summarize_sim_data_antiers <- function(sim_data, account) {
+summarize_sim_data_antiers <- function(sim_data, account, chain = "Polkadot") {
+
+  if(chain == "Polkadot"){
+    unit <- " DOT"
+  } else if(chain == "Kusama"){
+    unit <- " KSM"
+  }
 
   nominations <- sim_data$results$nominators
 
@@ -76,11 +95,11 @@ summarize_sim_data_antiers <- function(sim_data, account) {
       summary_data[[i]] <- data.frame(
         nominator_account = nominations[[i]][account == nominations[[i]]$address,1],
         stash = sim_data$results$account[i],
-        self_stake = as.numeric(stringr::str_remove(sim_data$results$self_stake[i], " DOT")),
-        total_stake = as.numeric(stringr::str_remove(sim_data$results$total_stake[i], " DOT")),
+        self_stake = as.numeric(stringr::str_remove(sim_data$results$self_stake[i], unit)),
+        total_stake = as.numeric(stringr::str_remove(sim_data$results$total_stake[i], unit)),
         #commission = sim_data$active_validators$commission[[i]],
         nominations_count = sim_data$results$nominator_count[i],
-        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$address,2], " DOT")),
+        nominator_stake = as.numeric(stringr::str_remove(nominations[[i]][account == nominations[[i]]$address,2], unit)),
         active = TRUE
       )
     }
