@@ -4,9 +4,23 @@
 #library(stringr)
 
 accounts <- c(
+  "EX9uchmfeSqKTM7cMMg8DkH49XV8i4R7a7rqCn8btpZBHDP",
+  "G1rrUNQSk7CjjEmLSGcpNu72tVtyzbWdUvgmSer9eBitXWf",
+  "HgTtJusFEn2gmMmB5wmJDnMRXKD6dzqCpNR7a99kkQ7BNvX"
+)
+
+
+
+
+
+accounts <- c(
   "15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK",
   "14gAowz3LaAqYkRjqUZkjZUxKFUzLtN2oZJSfr3ziHBRhwgc",
-  "13SkL2uACPqBzpKBh3d2n5msYNFB2QapA5vEDeKeLjG2LS3Y"
+  "13SkL2uACPqBzpKBh3d2n5msYNFB2QapA5vEDeKeLjG2LS3Y",
+  "156U1ffF2ZSR5sBpYNUxvXu3rprh4x4of3WdYuBcReD87qcc",
+  "12K2F1PeLUiVmt7GfBgiQvtGP4HbtUJ55cLvwbybE8W3nau5",
+  "13aUbVbnthMvYuSLUbfK6eTQWaDWLriRrP89ExD17Ep19BkK",
+  "12ZMM3vPtEwqmNgzjLqELYYeCvoP1cpf3yn2qwD9J8K1Q4pn"
 )
 
 big_data <- list()
@@ -15,13 +29,13 @@ for (j in 1:length(accounts)){
 
   # Fetch data from Subscan ----
 
-  scanner_data <- fetch_scanner_data(accounts[j])
+  scanner_data <- fetch_scanner_data(accounts[j], chain = "Kusama")
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("validators_prediction_11229417.json")
+  sim_data <- jsonlite::fromJSON("validators_prediction-2.json")
 
-  summary_data <- summarize_sim_data_antiers(sim_data = sim_data, account = accounts[j])
+  summary_data <- summarize_sim_data_antiers(sim_data = sim_data, account = accounts[j], chain = "Kusama")
 
   # Tests ----
 
