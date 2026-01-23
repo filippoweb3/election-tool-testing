@@ -3,6 +3,12 @@
 #library(dplyr)
 #library(stringr)
 
+#for API usage, spin up sever via terminal with the code below
+#cargo run -- \
+#--rpc-endpoint wss://sys.ibp.network/asset-hub-polkadot \
+#server --address 127.0.0.1:8080
+
+# Kusmama Accounts
 accounts <- c(
   "EX9uchmfeSqKTM7cMMg8DkH49XV8i4R7a7rqCn8btpZBHDP",
   "G1rrUNQSk7CjjEmLSGcpNu72tVtyzbWdUvgmSer9eBitXWf",
@@ -12,7 +18,7 @@ accounts <- c(
 
 
 
-
+# Polkadot Accounts
 accounts <- c(
   "15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK",
   "14gAowz3LaAqYkRjqUZkjZUxKFUzLtN2oZJSfr3ziHBRhwgc",
@@ -29,13 +35,26 @@ for (j in 1:length(accounts)){
 
   # Fetch data from Subscan ----
 
-  scanner_data <- fetch_scanner_data(accounts[j], chain = "Kusama")
+  scanner_data <- fetch_scanner_data(accounts[j], chain = "Polkadot")
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("simulate-9.json")
+  sim_data <- jsonlite::fromJSON("simulate_11340213.json")
 
-  summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j], chain = "Kusama")
+  #summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j], chain = "Polkadot")
+
+  #using api
+  summary_data <- summarize_sim_data_bilinear(sim_data = NULL,
+                                              account = accounts[j],
+                                              chain = "Polkadot",
+                                              block_hash = "0xd60f3cc1b23704706503537750e99a4927094b640d0e5618bcf7074845543dc1",
+                                              params = list(desired_validators = 600,
+                                                            algorithm = "SeqPhragmen",
+                                                            iterations = 20,
+                                                            reduce = TRUE,
+                                                            max_nominations = 16
+                                                            )
+                                              )
 
   # Tests ----
 
@@ -80,6 +99,12 @@ do.call(rbind, big_data)
 
 fetched <- jsonlite::fromJSON("snapshot_11312861.json")
 built <- jsonlite::fromJSON("snapshot_11312826.json")
+
+#using api
+fetched <- get_snapshot(block_hash = "0x8434fdaebed6844e0c6848eab2149d2540f5215c585aa5ffeea89392c879d7b2")
+fetched <- fetched$result
+built <- get_snapshot(block_hash = "0xd60f3cc1b23704706503537750e99a4927094b640d0e5618bcf7074845543dc1")
+built <- built$result
 
 fetched_nom <- fetched$nominators$stash
 built_nom <- built$nominators$stash
