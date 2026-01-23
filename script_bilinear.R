@@ -15,9 +15,6 @@ accounts <- c(
   "HgTtJusFEn2gmMmB5wmJDnMRXKD6dzqCpNR7a99kkQ7BNvX"
 )
 
-
-
-
 # Polkadot Accounts
 accounts <- c(
   "15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK",
@@ -39,22 +36,22 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("simulate_11340213.json")
+  sim_data <- jsonlite::fromJSON("simulate_12814080.json")
 
-  #summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j], chain = "Polkadot")
+  summary_data <- summarize_sim_data_bilinear(sim_data = sim_data, account = accounts[j], chain = "Polkadot")
 
   #using api
-  summary_data <- summarize_sim_data_bilinear(sim_data = NULL,
-                                              account = accounts[j],
-                                              chain = "Polkadot",
-                                              block_hash = "0xd60f3cc1b23704706503537750e99a4927094b640d0e5618bcf7074845543dc1",
-                                              params = list(desired_validators = 600,
-                                                            algorithm = "SeqPhragmen",
-                                                            iterations = 20,
-                                                            reduce = TRUE,
-                                                            max_nominations = 16
-                                                            )
-                                              )
+  #summary_data <- summarize_sim_data_bilinear(sim_data = NULL,
+  #                                            account = accounts[j],
+  #                                            chain = "Kusama",
+  #                                            block_hash = "0x9acf11d3ae2e277e1f2e8898bcfa34b69f4b78c2e44957b70a3882605eda1240",
+  #                                            params = list(desired_validators = 1000,
+  #                                                          algorithm = "SeqPhragmen",
+  #                                                          iterations = 10,
+  #                                                          reduce = TRUE,
+  #                                                          max_nominations = 24
+  #                                                          )
+  #                                            )
 
   # Tests ----
 
@@ -101,9 +98,9 @@ fetched <- jsonlite::fromJSON("snapshot_11312861.json")
 built <- jsonlite::fromJSON("snapshot_11312826.json")
 
 #using api
-fetched <- get_snapshot(block_hash = "0x8434fdaebed6844e0c6848eab2149d2540f5215c585aa5ffeea89392c879d7b2")
+fetched <- get_snapshot(block_hash = "0xa1eecaff82558b29708204cf2e001de32d9661d888507e006010a00d85f3014c")
 fetched <- fetched$result
-built <- get_snapshot(block_hash = "0xd60f3cc1b23704706503537750e99a4927094b640d0e5618bcf7074845543dc1")
+built <- get_snapshot(block_hash = "0x9acf11d3ae2e277e1f2e8898bcfa34b69f4b78c2e44957b70a3882605eda1240")
 built <- built$result
 
 fetched_nom <- fetched$nominators$stash
