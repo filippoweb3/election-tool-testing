@@ -44,7 +44,12 @@ fetch_scanner_data <- function(account, chain = "Polkadot") {
 }
 
 #' @export
-summarize_sim_data_bilinear <- function(sim_data, account, chain = "Polkadot") {
+summarize_sim_data_bilinear <- function(sim_data, account, chain = "Polkadot", params = NULL, block_hash = NULL) {
+
+  if(is.null(sim_data)){
+    sim_data <- get_simulation(block_hash = block_hash, params = params)
+    sim_data <- sim_data$result
+  }
 
   if(chain == "Polkadot"){
     unit <- " DOT"
@@ -108,5 +113,48 @@ summarize_sim_data_antiers <- function(sim_data, account, chain = "Polkadot") {
   summary_data <- do.call(rbind, summary_data[lengths(summary_data) > 0])
 
   return(summary_data)
+
+}
+
+#' @export
+get_snapshot <- function(block_hash){
+  snapshot_api_url <- "http://127.0.0.1:8080/snapshot"
+
+  res <- httr::GET(
+    url = snapshot_api_url,
+    query = list(block = block_hash)
+  )
+
+  content <- httr::content(res, as = "text", encoding = "UTF-8")
+  data <- jsonlite::fromJSON(content, simplifyVector = TRUE)
+
+  return(data)
+
+}
+
+#' @export
+get_simulation <- function(block_hash,
+                           params = list(
+                             desired_validators = 600,
+                             algorithm = "SeqPhragmen",
+                             iterations = 20,
+                             reduce = TRUE,
+                             max_nominations = 16
+                           )
+){
+
+  simulate_api_url <- "http://127.0.0.1:8080/simulate"
+
+  res <- httr::POST(
+    url = simulate_api_url,
+    httr::add_headers(`Content-Type` = "application/json"),
+    body = jsonlite::toJSON(params, auto_unbox = TRUE),
+    query = list(block = block_hash)
+  )
+
+  content <- httr::content(res, as = "text", encoding = "UTF-8")
+  data <- jsonlite::fromJSON(content, simplifyVector = TRUE)
+
+  return(data)
 
 }
