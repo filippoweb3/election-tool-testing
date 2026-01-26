@@ -3,16 +3,14 @@
 #library(dplyr)
 #library(stringr)
 
+# Kusmama Accounts
 accounts <- c(
   "EX9uchmfeSqKTM7cMMg8DkH49XV8i4R7a7rqCn8btpZBHDP",
   "G1rrUNQSk7CjjEmLSGcpNu72tVtyzbWdUvgmSer9eBitXWf",
   "HgTtJusFEn2gmMmB5wmJDnMRXKD6dzqCpNR7a99kkQ7BNvX"
 )
 
-
-
-
-
+# Polkadot Accounts
 accounts <- c(
   "15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK",
   "14gAowz3LaAqYkRjqUZkjZUxKFUzLtN2oZJSfr3ziHBRhwgc",
@@ -33,7 +31,7 @@ for (j in 1:length(accounts)){
 
   # Compile simulations ----
 
-  sim_data <- jsonlite::fromJSON("validators_prediction-2.json")
+  sim_data <- jsonlite::fromJSON("validators_prediction_12814080.json")
 
   summary_data <- summarize_sim_data_antiers(sim_data = sim_data, account = accounts[j], chain = "Kusama")
 
