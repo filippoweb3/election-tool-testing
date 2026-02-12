@@ -158,3 +158,30 @@ get_simulation <- function(block_hash,
   return(data)
 
 }
+
+
+#' @export
+get_simulation_antiers <- function(block_number,
+                           params = list(
+                             desired_validators = 600,
+                             algorithm = "SeqPhragmen",
+                             balancing_iterations = 20,
+                             do_reduce = TRUE
+                           )
+){
+
+  simulate_api_url <- "http://127.0.0.1:8080/simulate"
+
+  res <- httr::POST(
+    url = simulate_api_url,
+    httr::add_headers(`Content-Type` = "application/json"),
+    body = jsonlite::toJSON(params, auto_unbox = TRUE),
+    query = list(block = block_number)
+  )
+
+  content <- httr::content(res, as = "text", encoding = "UTF-8")
+  data <- jsonlite::fromJSON(content, simplifyVector = TRUE)
+
+  return(data)
+
+}

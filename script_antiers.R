@@ -29,9 +29,17 @@ for (j in 1:length(accounts)){
 
   scanner_data <- fetch_scanner_data(accounts[j], chain = "Polkadot")
 
-  # Compile simulations ----
+  sim_data <- jsonlite::fromJSON("validators_prediction-1.json")
 
-  sim_data <- jsonlite::fromJSON("validators_prediction.json")
+  #using api
+  #sim_data <- get_simulation_antiers(block_number = 11965735, params = list(desired_validators = 600,
+  #                                                                          algorithm = "SeqPhragmen",
+  #                                                                          balancing_iterations = 10,
+  #                                                                          do_reduce = TRUE))
+
+  #sim_data <- sim_data$result$validators
+
+  # Compile simulations ----
 
   summary_data <- summarize_sim_data_antiers(sim_data = sim_data, account = accounts[j], chain = "Polkadot")
 
