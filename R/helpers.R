@@ -133,6 +133,22 @@ get_snapshot <- function(block_hash){
 }
 
 #' @export
+get_snapshot_antiers <- function(block_number){
+  snapshot_api_url <- "http://127.0.0.1:8080/snapshot"
+
+  res <- httr::GET(
+    url = snapshot_api_url,
+    query = list(block = block_number)
+  )
+
+  content <- httr::content(res, as = "text", encoding = "UTF-8")
+  data <- jsonlite::fromJSON(content, simplifyVector = TRUE)
+
+  return(data)
+
+}
+
+#' @export
 get_simulation <- function(block_hash,
                            params = list(
                              desired_validators = 600,

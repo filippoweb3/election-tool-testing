@@ -29,7 +29,7 @@ for (j in 1:length(accounts)){
 
   scanner_data <- fetch_scanner_data(accounts[j], chain = "Polkadot")
 
-  sim_data <- jsonlite::fromJSON("validators_prediction-1.json")
+  sim_data <- jsonlite::fromJSON("validators_prediction-2.json")
 
   #using api
   #sim_data <- get_simulation_antiers(block_number = 11965735, params = list(desired_validators = 600,
